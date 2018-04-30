@@ -1,0 +1,48 @@
+{
+  "name": "angular-moose-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:js": "eslint app/**",
+    "build:js": "browserify app/app.js -d | ng-annotate -ar - | uglifyjs -b > app/bundle.moose.js",
+    "watch:js": "onchange \"app/**/*.js\" -e \"app/bundle.moose.js\" -- npm run build:js",
+    "build:css": "node-sass --source-map true --precision 6 assets/src/scss -o assets/dist/css",
+    "postbuild:css": "postcss assets/dist/css/style.css -d assets/dist/css --use autoprefixer --map false",
+    "watch:scss": "onchange \"**/*.scss\" -- npm run build:css",
+    "minify:css": "cssnano < assets/dist/css/style.css > assets/dist/css/style.min.css",
+    "build:all": "npm run build:css && npm run postbuild:css && npm run build:js",
+    "watch:all": "npm-run-all --parallel watch:scss watch:js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.metrosystems.net/carsten.goeldner01/angular-moose-test.git"
+  },
+  "author": "Carsten Goeldner <carsten.goeldner@wfp2.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "browserify": "^14.1.0",
+    "cssnano-cli": "^1.0.5",
+    "eslint": "^3.17.1",
+    "eslint-plugin-angular": "^1.6.2",
+    "node-sass": "^4.5.0",
+    "npm-run-all": "^4.0.2",
+    "onchange": "^3.2.1",
+    "postcss-cli": "^3.0.0-beta",
+    "uglify-js": "^2.8.13"
+  },
+  "dependencies": {
+    "angular": "^1.6.8",
+    "angular-animate": "^1.6.8",
+    "angular-i18n": "^1.6.8",
+    "angular-resource": "^1.6.8",
+    "angular-route": "^1.6.8",
+    "angular-ui-router": "^1.0.3",
+    "angular-translate": "^2.17.0",
+    "angular-translate-loader-static-files": "^2.17.0",
+    "ng-annotate": "^1.2.1",
+    "ngstorage": "^0.3.11"
+  }
+}
