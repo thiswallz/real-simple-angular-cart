@@ -30,7 +30,7 @@
         require("angular-translate");
         require("angular-translate-loader-static-files");
         require("ngstorage");
-        angular.module("moose", [ "ngAnimate", "ngResource", "ngStorage", "ui.router", "pascalprecht.translate", "moose.configuration", "moose.dashboard", "moose.header", "moose.sidebar" ]).config([ "$httpProvider", "$urlRouterProvider", "$stateProvider", "$translateProvider", function($httpProvider, $urlRouterProvider, $stateProvider, $translateProvider) {
+        angular.module("moose", [ "ngAnimate", "ngResource", "ngStorage", "ui.router", "pascalprecht.translate", "moose.configuration", "moose.dashboard", "moose.shopping", "moose.header", "moose.sidebar" ]).config([ "$httpProvider", "$urlRouterProvider", "$stateProvider", "$translateProvider", function($httpProvider, $urlRouterProvider, $stateProvider, $translateProvider) {
             $translateProvider.useStaticFilesLoader({
                 prefix: "assets/dist/languages/lang.",
                 suffix: ".json"
@@ -71,15 +71,15 @@
         "./configurations": 3,
         "./directives": 4,
         "./modules": 8,
-        "./moose.component": 10,
-        "./services": 11,
-        angular: 105,
-        "angular-animate": 85,
-        "angular-resource": 87,
-        "angular-translate": 89,
-        "angular-translate-loader-static-files": 88,
-        "angular-ui-router": 93,
-        ngstorage: 106
+        "./moose.component": 13,
+        "./services": 14,
+        angular: 108,
+        "angular-animate": 88,
+        "angular-resource": 90,
+        "angular-translate": 92,
+        "angular-translate-loader-static-files": 91,
+        "angular-ui-router": 96,
+        ngstorage: 109
     } ],
     2: [ function(require, module, exports) {
         angular.module("moose.configuration", []).value("CONFIGURATION", {
@@ -135,15 +135,65 @@
     8: [ function(require, module, exports) {
         require("./dashboard/dashboard.module");
         require("./dashboard/dashboard.component");
+        require("./shopping/shopping.module");
+        require("./shopping/shopping.component");
+        require("./shopping/list/shopping.list.component");
         require("./header/header.component");
         require("./sidebar/sidebar.component");
     }, {
         "./dashboard/dashboard.component": 5,
         "./dashboard/dashboard.module": 6,
         "./header/header.component": 7,
-        "./sidebar/sidebar.component": 9
+        "./shopping/list/shopping.list.component": 9,
+        "./shopping/shopping.component": 10,
+        "./shopping/shopping.module": 11,
+        "./sidebar/sidebar.component": 12
     } ],
     9: [ function(require, module, exports) {
+        angular.module("moose.shopping").component("mooseShoppingList", {
+            controller: ShoppingListController,
+            templateUrl: "app/modules/shopping/list/shopping.list.component.html"
+        });
+        function ShoppingListController() {
+            var ctrl = this;
+            ctrl.$onInit = function() {
+                ctrl.user = {
+                    fullName: "Hallo Welt"
+                };
+            };
+        }
+    }, {} ],
+    10: [ function(require, module, exports) {
+        angular.module("moose.shopping").component("mooseShopping", {
+            controller: ShoppingController,
+            templateUrl: "app/modules/shopping/shopping.component.html"
+        });
+        function ShoppingController() {
+            var ctrl = this;
+            ctrl.$onInit = function() {
+                ctrl.user = {
+                    fullName: "Hallo Welt"
+                };
+            };
+        }
+    }, {} ],
+    11: [ function(require, module, exports) {
+        angular.module("moose.shopping", []).config([ "$stateProvider", function LoginConfiguration($stateProvider) {
+            $stateProvider.state({
+                abstract: true,
+                name: "app.shopping",
+                title: "Shopping",
+                class: "app-shopping",
+                url: "/shopping",
+                component: "mooseShopping",
+                restricted: true
+            }).state("app.shopping.list", {
+                url: "/list",
+                component: "mooseShoppingList"
+            });
+        } ]);
+    }, {} ],
+    12: [ function(require, module, exports) {
         angular.module("moose.sidebar", []).component("mooseSidebar", {
             controller: HeaderController,
             templateUrl: "app/modules/sidebar/sidebar.component.html"
@@ -152,7 +202,7 @@
             var ctrl = this;
         }
     }, {} ],
-    10: [ function(require, module, exports) {
+    13: [ function(require, module, exports) {
         angular.module("moose").component("mooseApp", {
             controller: MooseController,
             templateUrl: "app/moose.component.html"
@@ -162,8 +212,8 @@
             ctrl.$onInit = function() {};
         }
     }, {} ],
-    11: [ function(require, module, exports) {}, {} ],
-    12: [ function(require, module, exports) {
+    14: [ function(require, module, exports) {}, {} ],
+    15: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -495,11 +545,11 @@
             return exports.silenceUncaughtInPromise(coreservices_1.services.$q.reject(error));
         };
     }, {
-        "./coreservices": 13,
-        "./hof": 15,
-        "./predicates": 17
+        "./coreservices": 16,
+        "./hof": 18,
+        "./predicates": 20
     } ],
-    13: [ function(require, module, exports) {
+    16: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -515,7 +565,7 @@
         };
         exports.services = services;
     }, {} ],
-    14: [ function(require, module, exports) {
+    17: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -544,7 +594,7 @@
         }();
         exports.Glob = Glob;
     }, {} ],
-    15: [ function(require, module, exports) {
+    18: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -663,7 +713,7 @@
         }
         exports.pattern = pattern;
     }, {} ],
-    16: [ function(require, module, exports) {
+    19: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -680,16 +730,16 @@
         __export(require("./strings"));
         __export(require("./trace"));
     }, {
-        "./common": 12,
-        "./coreservices": 13,
-        "./glob": 14,
-        "./hof": 15,
-        "./predicates": 17,
-        "./queue": 18,
-        "./strings": 19,
-        "./trace": 20
+        "./common": 15,
+        "./coreservices": 16,
+        "./glob": 17,
+        "./hof": 18,
+        "./predicates": 20,
+        "./queue": 21,
+        "./strings": 22,
+        "./trace": 23
     } ],
-    17: [ function(require, module, exports) {
+    20: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -732,10 +782,10 @@
         exports.isInjectable = isInjectable;
         exports.isPromise = hof_1.and(exports.isObject, hof_1.pipe(hof_1.prop("then"), exports.isFunction));
     }, {
-        "../state/stateObject": 50,
-        "./hof": 15
+        "../state/stateObject": 53,
+        "./hof": 18
     } ],
-    18: [ function(require, module, exports) {
+    21: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -782,7 +832,7 @@
         }();
         exports.Queue = Queue;
     }, {} ],
-    19: [ function(require, module, exports) {
+    22: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -879,14 +929,14 @@
         }
         exports.joinNeighborsR = joinNeighborsR;
     }, {
-        "../resolve/resolvable": 44,
-        "../transition/rejectFactory": 59,
-        "../transition/transition": 60,
-        "./common": 12,
-        "./hof": 15,
-        "./predicates": 17
+        "../resolve/resolvable": 47,
+        "../transition/rejectFactory": 62,
+        "../transition/transition": 63,
+        "./common": 15,
+        "./hof": 18,
+        "./predicates": 20
     } ],
-    20: [ function(require, module, exports) {
+    23: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1016,11 +1066,11 @@
         var trace = new Trace();
         exports.trace = trace;
     }, {
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "./strings": 19
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "./strings": 22
     } ],
-    21: [ function(require, module, exports) {
+    24: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1043,10 +1093,10 @@
         }();
         exports.UIRouterGlobals = UIRouterGlobals;
     }, {
-        "./common/queue": 18,
-        "./params/stateParams": 38
+        "./common/queue": 21,
+        "./params/stateParams": 41
     } ],
-    22: [ function(require, module, exports) {
+    25: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1101,10 +1151,10 @@
             return transitionService.onCreate({}, addCoreResolvables);
         };
     }, {
-        "../router": 46,
-        "../transition/transition": 60
+        "../router": 49,
+        "../transition/transition": 63
     } ],
-    23: [ function(require, module, exports) {
+    26: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1127,10 +1177,10 @@
             });
         };
     }, {
-        "../common/trace": 20,
-        "../transition/rejectFactory": 59
+        "../common/trace": 23,
+        "../transition/rejectFactory": 62
     } ],
-    24: [ function(require, module, exports) {
+    27: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1146,7 +1196,7 @@
             });
         };
     }, {} ],
-    25: [ function(require, module, exports) {
+    28: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1211,9 +1261,9 @@
         }
         exports.lazyLoadState = lazyLoadState;
     }, {
-        "../common/coreservices": 13
+        "../common/coreservices": 16
     } ],
-    26: [ function(require, module, exports) {
+    29: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1250,7 +1300,7 @@
             }, onEnterHook);
         };
     }, {} ],
-    27: [ function(require, module, exports) {
+    30: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1281,11 +1331,11 @@
             }, redirectToHook);
         };
     }, {
-        "../common/coreservices": 13,
-        "../common/predicates": 17,
-        "../state/targetState": 54
+        "../common/coreservices": 16,
+        "../common/predicates": 20,
+        "../state/targetState": 57
     } ],
-    28: [ function(require, module, exports) {
+    31: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1312,11 +1362,11 @@
             });
         };
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../resolve/resolveContext": 45
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../resolve/resolveContext": 48
     } ],
-    29: [ function(require, module, exports) {
+    32: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1342,9 +1392,9 @@
             return transitionService.onCreate({}, updateGlobalState);
         };
     }, {
-        "../common/common": 12
+        "../common/common": 15
     } ],
-    30: [ function(require, module, exports) {
+    33: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1367,7 +1417,7 @@
             });
         };
     }, {} ],
-    31: [ function(require, module, exports) {
+    34: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1402,10 +1452,10 @@
             return transitionService.onSuccess({}, activateViews);
         };
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13
+        "../common/common": 15,
+        "../common/coreservices": 16
     } ],
-    32: [ function(require, module, exports) {
+    35: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -1426,20 +1476,20 @@
         __export(require("./vanilla"));
         __export(require("./interface"));
     }, {
-        "./common/index": 16,
-        "./globals": 21,
-        "./interface": 33,
-        "./params/index": 34,
-        "./path/index": 39,
-        "./resolve/index": 42,
-        "./router": 46,
-        "./state/index": 47,
-        "./transition/index": 57,
-        "./url/index": 64,
-        "./vanilla": 70,
-        "./view/index": 82
+        "./common/index": 19,
+        "./globals": 24,
+        "./interface": 36,
+        "./params/index": 37,
+        "./path/index": 42,
+        "./resolve/index": 45,
+        "./router": 49,
+        "./state/index": 50,
+        "./transition/index": 60,
+        "./url/index": 67,
+        "./vanilla": 73,
+        "./view/index": 85
     } ],
-    33: [ function(require, module, exports) {
+    36: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1451,7 +1501,7 @@
         }();
         exports.UIRouterPluginBase = UIRouterPluginBase;
     }, {} ],
-    34: [ function(require, module, exports) {
+    37: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -1464,12 +1514,12 @@
         __export(require("./stateParams"));
         __export(require("./paramType"));
     }, {
-        "./param": 35,
-        "./paramType": 36,
-        "./paramTypes": 37,
-        "./stateParams": 38
+        "./param": 38,
+        "./paramType": 39,
+        "./paramTypes": 40,
+        "./stateParams": 41
     } ],
-    35: [ function(require, module, exports) {
+    38: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1654,13 +1704,13 @@
         }();
         exports.Param = Param;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "./paramType": 36
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "./paramType": 39
     } ],
-    36: [ function(require, module, exports) {
+    39: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1755,10 +1805,10 @@
             });
         }
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17
+        "../common/common": 15,
+        "../common/predicates": 20
     } ],
-    37: [ function(require, module, exports) {
+    40: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1891,13 +1941,13 @@
         }
         initDefaultTypes();
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "./paramType": 36
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "./paramType": 39
     } ],
-    38: [ function(require, module, exports) {
+    41: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -1928,9 +1978,9 @@
         }();
         exports.StateParams = StateParams;
     }, {
-        "../common/common": 12
+        "../common/common": 15
     } ],
-    39: [ function(require, module, exports) {
+    42: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -1941,10 +1991,10 @@
         __export(require("./pathNode"));
         __export(require("./pathFactory"));
     }, {
-        "./pathFactory": 40,
-        "./pathNode": 41
+        "./pathFactory": 43,
+        "./pathNode": 44
     } ],
-    40: [ function(require, module, exports) {
+    43: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2070,12 +2120,12 @@
         };
         exports.PathUtils = PathUtils;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../state/targetState": 54,
-        "./pathNode": 41
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../state/targetState": 57,
+        "./pathNode": 44
     } ],
-    41: [ function(require, module, exports) {
+    44: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2132,11 +2182,11 @@
         }();
         exports.PathNode = PathNode;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../params/param": 35
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../params/param": 38
     } ],
-    42: [ function(require, module, exports) {
+    45: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -2148,11 +2198,11 @@
         __export(require("./resolvable"));
         __export(require("./resolveContext"));
     }, {
-        "./interface": 43,
-        "./resolvable": 44,
-        "./resolveContext": 45
+        "./interface": 46,
+        "./resolvable": 47,
+        "./resolveContext": 48
     } ],
-    43: [ function(require, module, exports) {
+    46: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2169,7 +2219,7 @@
             }
         };
     }, {} ],
-    44: [ function(require, module, exports) {
+    47: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2258,13 +2308,13 @@
         };
         exports.Resolvable = Resolvable;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/predicates": 17,
-        "../common/strings": 19,
-        "../common/trace": 20
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/predicates": 20,
+        "../common/strings": 22,
+        "../common/trace": 23
     } ],
-    45: [ function(require, module, exports) {
+    48: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2415,16 +2465,16 @@
             return UIInjectorImpl;
         }();
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/hof": 15,
-        "../common/strings": 19,
-        "../common/trace": 20,
-        "../path/pathFactory": 40,
-        "./interface": 43,
-        "./resolvable": 44
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/hof": 18,
+        "../common/strings": 22,
+        "../common/trace": 23,
+        "../path/pathFactory": 43,
+        "./interface": 46,
+        "./resolvable": 47
     } ],
-    46: [ function(require, module, exports) {
+    49: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2508,19 +2558,19 @@
         }();
         exports.UIRouter = UIRouter;
     }, {
-        "./common/common": 12,
-        "./common/predicates": 17,
-        "./common/trace": 20,
-        "./globals": 21,
-        "./state/stateRegistry": 52,
-        "./state/stateService": 53,
-        "./transition/transitionService": 63,
-        "./url/urlMatcherFactory": 66,
-        "./url/urlRouter": 67,
-        "./url/urlService": 69,
-        "./view/view": 83
+        "./common/common": 15,
+        "./common/predicates": 20,
+        "./common/trace": 23,
+        "./globals": 24,
+        "./state/stateRegistry": 55,
+        "./state/stateService": 56,
+        "./transition/transitionService": 66,
+        "./url/urlMatcherFactory": 69,
+        "./url/urlRouter": 70,
+        "./url/urlService": 72,
+        "./view/view": 86
     } ],
-    47: [ function(require, module, exports) {
+    50: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -2536,15 +2586,15 @@
         __export(require("./stateService"));
         __export(require("./targetState"));
     }, {
-        "./stateBuilder": 48,
-        "./stateMatcher": 49,
-        "./stateObject": 50,
-        "./stateQueueManager": 51,
-        "./stateRegistry": 52,
-        "./stateService": 53,
-        "./targetState": 54
+        "./stateBuilder": 51,
+        "./stateMatcher": 52,
+        "./stateObject": 53,
+        "./stateQueueManager": 54,
+        "./stateRegistry": 55,
+        "./stateService": 56,
+        "./targetState": 57
     } ],
-    48: [ function(require, module, exports) {
+    51: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2765,14 +2815,14 @@
         }();
         exports.StateBuilder = StateBuilder;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../common/strings": 19,
-        "../resolve/resolvable": 44
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../common/strings": 22,
+        "../resolve/resolvable": 47
     } ],
-    49: [ function(require, module, exports) {
+    52: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2835,10 +2885,10 @@
         }();
         exports.StateMatcher = StateMatcher;
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17
+        "../common/common": 15,
+        "../common/predicates": 20
     } ],
-    50: [ function(require, module, exports) {
+    53: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2903,12 +2953,12 @@
         };
         exports.StateObject = StateObject;
     }, {
-        "../common/common": 12,
-        "../common/glob": 14,
-        "../common/hof": 15,
-        "../common/predicates": 17
+        "../common/common": 15,
+        "../common/glob": 17,
+        "../common/hof": 18,
+        "../common/predicates": 20
     } ],
-    51: [ function(require, module, exports) {
+    54: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -2994,12 +3044,12 @@
         }();
         exports.StateQueueManager = StateQueueManager;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "./stateObject": 50
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "./stateObject": 53
     } ],
-    52: [ function(require, module, exports) {
+    55: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3102,13 +3152,13 @@
         }();
         exports.StateRegistry = StateRegistry;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "./stateBuilder": 48,
-        "./stateMatcher": 49,
-        "./stateQueueManager": 51
+        "../common/common": 15,
+        "../common/hof": 18,
+        "./stateBuilder": 51,
+        "./stateMatcher": 52,
+        "./stateQueueManager": 54
     } ],
-    53: [ function(require, module, exports) {
+    56: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3377,22 +3427,22 @@
         }();
         exports.StateService = StateService;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/glob": 14,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../common/queue": 18,
-        "../hooks/lazyLoad": 25,
-        "../params/param": 35,
-        "../path/pathFactory": 40,
-        "../path/pathNode": 41,
-        "../resolve/resolveContext": 45,
-        "../transition/rejectFactory": 59,
-        "../transition/transitionService": 63,
-        "./targetState": 54
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/glob": 17,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../common/queue": 21,
+        "../hooks/lazyLoad": 28,
+        "../params/param": 38,
+        "../path/pathFactory": 43,
+        "../path/pathNode": 44,
+        "../resolve/resolveContext": 48,
+        "../transition/rejectFactory": 62,
+        "../transition/transitionService": 66,
+        "./targetState": 57
     } ],
-    54: [ function(require, module, exports) {
+    57: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3452,10 +3502,10 @@
         };
         exports.TargetState = TargetState;
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17
+        "../common/common": 15,
+        "../common/predicates": 20
     } ],
-    55: [ function(require, module, exports) {
+    58: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3532,12 +3582,12 @@
             };
         }
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17,
-        "./interface": 58,
-        "./transitionHook": 62
+        "../common/common": 15,
+        "../common/predicates": 20,
+        "./interface": 61,
+        "./transitionHook": 65
     } ],
-    56: [ function(require, module, exports) {
+    59: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3626,12 +3676,12 @@
         }
         exports.makeEvent = makeEvent;
     }, {
-        "../common/common": 12,
-        "../common/glob": 14,
-        "../common/predicates": 17,
-        "./interface": 58
+        "../common/common": 15,
+        "../common/glob": 17,
+        "../common/predicates": 20,
+        "./interface": 61
     } ],
-    57: [ function(require, module, exports) {
+    60: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -3648,16 +3698,16 @@
         __export(require("./transitionEventType"));
         __export(require("./transitionService"));
     }, {
-        "./hookBuilder": 55,
-        "./hookRegistry": 56,
-        "./interface": 58,
-        "./rejectFactory": 59,
-        "./transition": 60,
-        "./transitionEventType": 61,
-        "./transitionHook": 62,
-        "./transitionService": 63
+        "./hookBuilder": 58,
+        "./hookRegistry": 59,
+        "./interface": 61,
+        "./rejectFactory": 62,
+        "./transition": 63,
+        "./transitionEventType": 64,
+        "./transitionHook": 65,
+        "./transitionService": 66
     } ],
-    58: [ function(require, module, exports) {
+    61: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3676,7 +3726,7 @@
             TransitionHookScope[TransitionHookScope["STATE"] = 1] = "STATE";
         })(TransitionHookScope = exports.TransitionHookScope || (exports.TransitionHookScope = {}));
     }, {} ],
-    59: [ function(require, module, exports) {
+    62: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -3752,11 +3802,11 @@
         }();
         exports.Rejection = Rejection;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/strings": 19
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/strings": 22
     } ],
-    60: [ function(require, module, exports) {
+    63: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -4075,22 +4125,22 @@
         Transition.diToken = Transition;
         exports.Transition = Transition;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../common/trace": 20,
-        "../params/param": 35,
-        "../path/pathFactory": 40,
-        "../resolve/resolvable": 44,
-        "../resolve/resolveContext": 45,
-        "../state/targetState": 54,
-        "./hookBuilder": 55,
-        "./hookRegistry": 56,
-        "./interface": 58,
-        "./transitionHook": 62
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../common/trace": 23,
+        "../params/param": 38,
+        "../path/pathFactory": 43,
+        "../resolve/resolvable": 47,
+        "../resolve/resolveContext": 48,
+        "../state/targetState": 57,
+        "./hookBuilder": 58,
+        "./hookRegistry": 59,
+        "./interface": 61,
+        "./transitionHook": 65
     } ],
-    61: [ function(require, module, exports) {
+    64: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -4123,9 +4173,9 @@
         }();
         exports.TransitionEventType = TransitionEventType;
     }, {
-        "./transitionHook": 62
+        "./transitionHook": 65
     } ],
-    62: [ function(require, module, exports) {
+    65: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -4282,17 +4332,17 @@
         };
         exports.TransitionHook = TransitionHook;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../common/strings": 19,
-        "../common/trace": 20,
-        "../state/targetState": 54,
-        "./interface": 58,
-        "./rejectFactory": 59
+        "../common/common": 15,
+        "../common/coreservices": 16,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../common/strings": 22,
+        "../common/trace": 23,
+        "../state/targetState": 57,
+        "./interface": 61,
+        "./rejectFactory": 62
     } ],
-    63: [ function(require, module, exports) {
+    66: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -4462,26 +4512,26 @@
         }();
         exports.TransitionService = TransitionService;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../hooks/coreResolvables": 22,
-        "../hooks/ignoredTransition": 23,
-        "../hooks/invalidTransition": 24,
-        "../hooks/lazyLoad": 25,
-        "../hooks/onEnterExitRetain": 26,
-        "../hooks/redirectTo": 27,
-        "../hooks/resolve": 28,
-        "../hooks/updateGlobals": 29,
-        "../hooks/url": 30,
-        "../hooks/views": 31,
-        "./hookRegistry": 56,
-        "./interface": 58,
-        "./transition": 60,
-        "./transitionEventType": 61,
-        "./transitionHook": 62
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../hooks/coreResolvables": 25,
+        "../hooks/ignoredTransition": 26,
+        "../hooks/invalidTransition": 27,
+        "../hooks/lazyLoad": 28,
+        "../hooks/onEnterExitRetain": 29,
+        "../hooks/redirectTo": 30,
+        "../hooks/resolve": 31,
+        "../hooks/updateGlobals": 32,
+        "../hooks/url": 33,
+        "../hooks/views": 34,
+        "./hookRegistry": 59,
+        "./interface": 61,
+        "./transition": 63,
+        "./transitionEventType": 64,
+        "./transitionHook": 65
     } ],
-    64: [ function(require, module, exports) {
+    67: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -4495,13 +4545,13 @@
         __export(require("./urlRule"));
         __export(require("./urlService"));
     }, {
-        "./urlMatcher": 65,
-        "./urlMatcherFactory": 66,
-        "./urlRouter": 67,
-        "./urlRule": 68,
-        "./urlService": 69
+        "./urlMatcher": 68,
+        "./urlMatcherFactory": 69,
+        "./urlRouter": 70,
+        "./urlRule": 71,
+        "./urlService": 72
     } ],
-    65: [ function(require, module, exports) {
+    68: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -4804,13 +4854,13 @@
         UrlMatcher.nameValidator = /^\w+([-.]+\w+)*(?:\[\])?$/;
         exports.UrlMatcher = UrlMatcher;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../common/strings": 19,
-        "../params/param": 35
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../common/strings": 22,
+        "../params/param": 38
     } ],
-    66: [ function(require, module, exports) {
+    69: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -4886,13 +4936,13 @@
         }();
         exports.UrlMatcherFactory = UrlMatcherFactory;
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17,
-        "../params/param": 35,
-        "../params/paramTypes": 37,
-        "./urlMatcher": 65
+        "../common/common": 15,
+        "../common/predicates": 20,
+        "../params/param": 38,
+        "../params/paramTypes": 40,
+        "./urlMatcher": 68
     } ],
-    67: [ function(require, module, exports) {
+    70: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5084,14 +5134,14 @@
             return predicates_1.isFunction(handler) ? handler : hof_1.val(handler);
         }
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../state/targetState": 54,
-        "./urlMatcher": 65,
-        "./urlRule": 68
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../state/targetState": 57,
+        "./urlMatcher": 68,
+        "./urlRule": 71
     } ],
-    68: [ function(require, module, exports) {
+    71: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5207,12 +5257,12 @@
         }();
         exports.BaseUrlRule = BaseUrlRule;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "./urlMatcher": 65
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "./urlMatcher": 68
     } ],
-    69: [ function(require, module, exports) {
+    72: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5298,10 +5348,10 @@
         UrlService.locationConfigStub = makeStub(locationConfigFns);
         exports.UrlService = UrlService;
     }, {
-        "../common/common": 12,
-        "../common/coreservices": 13
+        "../common/common": 15,
+        "../common/coreservices": 16
     } ],
-    70: [ function(require, module, exports) {
+    73: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -5311,9 +5361,9 @@
         });
         __export(require("./vanilla/index"));
     }, {
-        "./vanilla/index": 74
+        "./vanilla/index": 77
     } ],
-    71: [ function(require, module, exports) {
+    74: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5374,11 +5424,11 @@
         }();
         exports.BaseLocationServices = BaseLocationServices;
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17,
-        "./utils": 81
+        "../common/common": 15,
+        "../common/predicates": 20,
+        "./utils": 84
     } ],
-    72: [ function(require, module, exports) {
+    75: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5423,9 +5473,9 @@
         }();
         exports.BrowserLocationConfig = BrowserLocationConfig;
     }, {
-        "../common/predicates": 17
+        "../common/predicates": 20
     } ],
-    73: [ function(require, module, exports) {
+    76: [ function(require, module, exports) {
         "use strict";
         var __extends = this && this.__extends || function() {
             var extendStatics = Object.setPrototypeOf || {
@@ -5469,10 +5519,10 @@
         }(baseLocationService_1.BaseLocationServices);
         exports.HashLocationService = HashLocationService;
     }, {
-        "./baseLocationService": 71,
-        "./utils": 81
+        "./baseLocationService": 74,
+        "./utils": 84
     } ],
-    74: [ function(require, module, exports) {
+    77: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -5491,18 +5541,18 @@
         __export(require("./utils"));
         __export(require("./plugins"));
     }, {
-        "./baseLocationService": 71,
-        "./browserLocationConfig": 72,
-        "./hashLocationService": 73,
-        "./injector": 75,
-        "./memoryLocationConfig": 76,
-        "./memoryLocationService": 77,
-        "./plugins": 78,
-        "./pushStateLocationService": 79,
-        "./q": 80,
-        "./utils": 81
+        "./baseLocationService": 74,
+        "./browserLocationConfig": 75,
+        "./hashLocationService": 76,
+        "./injector": 78,
+        "./memoryLocationConfig": 79,
+        "./memoryLocationService": 80,
+        "./plugins": 81,
+        "./pushStateLocationService": 82,
+        "./q": 83,
+        "./utils": 84
     } ],
-    75: [ function(require, module, exports) {
+    78: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5541,9 +5591,9 @@
             }
         };
     }, {
-        "../common/index": 16
+        "../common/index": 19
     } ],
-    76: [ function(require, module, exports) {
+    79: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5582,10 +5632,10 @@
         }();
         exports.MemoryLocationConfig = MemoryLocationConfig;
     }, {
-        "../common/common": 12,
-        "../common/predicates": 17
+        "../common/common": 15,
+        "../common/predicates": 20
     } ],
-    77: [ function(require, module, exports) {
+    80: [ function(require, module, exports) {
         "use strict";
         var __extends = this && this.__extends || function() {
             var extendStatics = Object.setPrototypeOf || {
@@ -5622,9 +5672,9 @@
         }(baseLocationService_1.BaseLocationServices);
         exports.MemoryLocationService = MemoryLocationService;
     }, {
-        "./baseLocationService": 71
+        "./baseLocationService": 74
     } ],
-    78: [ function(require, module, exports) {
+    81: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5655,17 +5705,17 @@
         exports.pushStateLocationPlugin = utils_1.locationPluginFactory("vanilla.pushStateLocation", true, pushStateLocationService_1.PushStateLocationService, browserLocationConfig_1.BrowserLocationConfig);
         exports.memoryLocationPlugin = utils_1.locationPluginFactory("vanilla.memoryLocation", false, memoryLocationService_1.MemoryLocationService, memoryLocationConfig_1.MemoryLocationConfig);
     }, {
-        "../common/coreservices": 13,
-        "./browserLocationConfig": 72,
-        "./hashLocationService": 73,
-        "./injector": 75,
-        "./memoryLocationConfig": 76,
-        "./memoryLocationService": 77,
-        "./pushStateLocationService": 79,
-        "./q": 80,
-        "./utils": 81
+        "../common/coreservices": 16,
+        "./browserLocationConfig": 75,
+        "./hashLocationService": 76,
+        "./injector": 78,
+        "./memoryLocationConfig": 79,
+        "./memoryLocationService": 80,
+        "./pushStateLocationService": 82,
+        "./q": 83,
+        "./utils": 84
     } ],
-    79: [ function(require, module, exports) {
+    82: [ function(require, module, exports) {
         "use strict";
         var __extends = this && this.__extends || function() {
             var extendStatics = Object.setPrototypeOf || {
@@ -5719,10 +5769,10 @@
         }(baseLocationService_1.BaseLocationServices);
         exports.PushStateLocationService = PushStateLocationService;
     }, {
-        "./baseLocationService": 71,
-        "./utils": 81
+        "./baseLocationService": 74,
+        "./utils": 84
     } ],
-    80: [ function(require, module, exports) {
+    83: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5770,9 +5820,9 @@
             }
         };
     }, {
-        "../common/index": 16
+        "../common/index": 19
     } ],
-    81: [ function(require, module, exports) {
+    84: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -5852,10 +5902,10 @@
         }
         exports.locationPluginFactory = locationPluginFactory;
     }, {
-        "../common/common": 12,
-        "../common/index": 16
+        "../common/common": 15,
+        "../common/index": 19
     } ],
-    82: [ function(require, module, exports) {
+    85: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -5865,9 +5915,9 @@
         });
         __export(require("./view"));
     }, {
-        "./view": 83
+        "./view": 86
     } ],
-    83: [ function(require, module, exports) {
+    86: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -6017,12 +6067,12 @@
         };
         exports.ViewService = ViewService;
     }, {
-        "../common/common": 12,
-        "../common/hof": 15,
-        "../common/predicates": 17,
-        "../common/trace": 20
+        "../common/common": 15,
+        "../common/hof": 18,
+        "../common/predicates": 20,
+        "../common/trace": 23
     } ],
-    84: [ function(require, module, exports) {
+    87: [ function(require, module, exports) {
         (function(window, angular) {
             "use strict";
             var ELEMENT_NODE = 1;
@@ -8187,13 +8237,13 @@
             }).directive("ngAnimateSwap", ngAnimateSwapDirective).directive("ngAnimateChildren", $$AnimateChildrenDirective).factory("$$rAFScheduler", $$rAFSchedulerFactory).provider("$$animateQueue", $$AnimateQueueProvider).provider("$$animation", $$AnimationProvider).provider("$animateCss", $AnimateCssProvider).provider("$$animateCssDriver", $$AnimateCssDriverProvider).provider("$$animateJs", $$AnimateJsProvider).provider("$$animateJsDriver", $$AnimateJsDriverProvider);
         })(window, window.angular);
     }, {} ],
-    85: [ function(require, module, exports) {
+    88: [ function(require, module, exports) {
         require("./angular-animate");
         module.exports = "ngAnimate";
     }, {
-        "./angular-animate": 84
+        "./angular-animate": 87
     } ],
-    86: [ function(require, module, exports) {
+    89: [ function(require, module, exports) {
         (function(window, angular) {
             "use strict";
             var $resourceMinErr = angular.$$minErr("$resource");
@@ -8490,13 +8540,13 @@
             });
         })(window, window.angular);
     }, {} ],
-    87: [ function(require, module, exports) {
+    90: [ function(require, module, exports) {
         require("./angular-resource");
         module.exports = "ngResource";
     }, {
-        "./angular-resource": 86
+        "./angular-resource": 89
     } ],
-    88: [ function(require, module, exports) {
+    91: [ function(require, module, exports) {
         (function(root, factory) {
             if (typeof define === "function" && define.amd) {
                 define([], function() {
@@ -8562,7 +8612,7 @@
             return "pascalprecht.translate";
         });
     }, {} ],
-    89: [ function(require, module, exports) {
+    92: [ function(require, module, exports) {
         (function(root, factory) {
             if (typeof define === "function" && define.amd) {
                 define([], function() {
@@ -10241,7 +10291,7 @@
             return "pascalprecht.translate";
         });
     }, {} ],
-    90: [ function(require, module, exports) {
+    93: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -10250,9 +10300,9 @@
         var ng_from_global = angular;
         exports.ng = ng_from_import && ng_from_import.module ? ng_from_import : ng_from_global;
     }, {
-        angular: 105
+        angular: 108
     } ],
-    91: [ function(require, module, exports) {
+    94: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -10506,10 +10556,10 @@
         } ];
         angular_1.ng.module("ui.router.state").directive("uiSref", uiSref).directive("uiSrefActive", uiSrefActive).directive("uiSrefActiveEq", uiSrefActive).directive("uiState", uiState);
     }, {
-        "../angular": 90,
-        "@uirouter/core": 32
+        "../angular": 93,
+        "@uirouter/core": 35
     } ],
-    92: [ function(require, module, exports) {
+    95: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -10773,13 +10823,13 @@
         angular_1.ng.module("ui.router.state").directive("uiView", exports.uiView);
         angular_1.ng.module("ui.router.state").directive("uiView", $ViewDirectiveFill);
     }, {
-        "../angular": 90,
-        "../services": 96,
-        "../statebuilders/views": 100,
-        "@uirouter/core": 32,
-        angular: 105
+        "../angular": 93,
+        "../services": 99,
+        "../statebuilders/views": 103,
+        "@uirouter/core": 35,
+        angular: 108
     } ],
-    93: [ function(require, module, exports) {
+    96: [ function(require, module, exports) {
         "use strict";
         function __export(m) {
             for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -10801,18 +10851,18 @@
         require("./viewScroll");
         exports.default = "ui.router";
     }, {
-        "./directives/stateDirectives": 91,
-        "./directives/viewDirective": 92,
-        "./injectables": 94,
-        "./services": 96,
-        "./stateFilters": 97,
-        "./stateProvider": 98,
-        "./statebuilders/views": 100,
-        "./urlRouterProvider": 102,
-        "./viewScroll": 103,
-        "@uirouter/core": 32
+        "./directives/stateDirectives": 94,
+        "./directives/viewDirective": 95,
+        "./injectables": 97,
+        "./services": 99,
+        "./stateFilters": 100,
+        "./stateProvider": 101,
+        "./statebuilders/views": 103,
+        "./urlRouterProvider": 105,
+        "./viewScroll": 106,
+        "@uirouter/core": 35
     } ],
-    94: [ function(require, module, exports) {
+    97: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -10838,7 +10888,7 @@
         var $urlMatcherFactory;
         var $urlMatcherFactoryProvider;
     }, {} ],
-    95: [ function(require, module, exports) {
+    98: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -10911,9 +10961,9 @@
         }();
         exports.Ng1LocationServices = Ng1LocationServices;
     }, {
-        "@uirouter/core": 32
+        "@uirouter/core": 35
     } ],
-    96: [ function(require, module, exports) {
+    99: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11031,16 +11081,16 @@
             return tuples.reduce(core_1.applyPairs, {});
         };
     }, {
-        "./angular": 90,
-        "./locationServices": 95,
-        "./stateProvider": 98,
-        "./statebuilders/onEnterExitRetain": 99,
-        "./statebuilders/views": 100,
-        "./templateFactory": 101,
-        "./urlRouterProvider": 102,
-        "@uirouter/core": 32
+        "./angular": 93,
+        "./locationServices": 98,
+        "./stateProvider": 101,
+        "./statebuilders/onEnterExitRetain": 102,
+        "./statebuilders/views": 103,
+        "./templateFactory": 104,
+        "./urlRouterProvider": 105,
+        "@uirouter/core": 35
     } ],
-    97: [ function(require, module, exports) {
+    100: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11066,9 +11116,9 @@
         exports.$IncludedByStateFilter = $IncludedByStateFilter;
         angular_1.ng.module("ui.router.state").filter("isState", $IsStateFilter).filter("includedByState", $IncludedByStateFilter);
     }, {
-        "./angular": 90
+        "./angular": 93
     } ],
-    98: [ function(require, module, exports) {
+    101: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11099,9 +11149,9 @@
         }();
         exports.StateProvider = StateProvider;
     }, {
-        "@uirouter/core": 32
+        "@uirouter/core": 35
     } ],
-    99: [ function(require, module, exports) {
+    102: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11124,10 +11174,10 @@
             };
         };
     }, {
-        "../services": 96,
-        "@uirouter/core": 32
+        "../services": 99,
+        "@uirouter/core": 35
     } ],
-    100: [ function(require, module, exports) {
+    103: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11221,9 +11271,9 @@
         }();
         exports.Ng1ViewConfig = Ng1ViewConfig;
     }, {
-        "@uirouter/core": 32
+        "@uirouter/core": 35
     } ],
-    101: [ function(require, module, exports) {
+    104: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11343,10 +11393,10 @@
             });
         };
     }, {
-        "./angular": 90,
-        "@uirouter/core": 32
+        "./angular": 93,
+        "@uirouter/core": 35
     } ],
-    102: [ function(require, module, exports) {
+    105: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11410,9 +11460,9 @@
         }();
         exports.UrlRouterProvider = UrlRouterProvider;
     }, {
-        "@uirouter/core": 32
+        "@uirouter/core": 35
     } ],
-    103: [ function(require, module, exports) {
+    106: [ function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", {
             value: true
@@ -11436,9 +11486,9 @@
         }
         angular_1.ng.module("ui.router.state").provider("$uiViewScroll", $ViewScrollProvider);
     }, {
-        "./angular": 90
+        "./angular": 93
     } ],
-    104: [ function(require, module, exports) {
+    107: [ function(require, module, exports) {
         (function(window) {
             "use strict";
             var minErrConfig = {
@@ -24012,13 +24062,13 @@
         })(window);
         !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
     }, {} ],
-    105: [ function(require, module, exports) {
+    108: [ function(require, module, exports) {
         require("./angular");
         module.exports = angular;
     }, {
-        "./angular": 104
+        "./angular": 107
     } ],
-    106: [ function(require, module, exports) {
+    109: [ function(require, module, exports) {
         (function(root, factory) {
             "use strict";
             if (typeof define === "function" && define.amd) {
@@ -24158,6 +24208,6 @@
             }
         });
     }, {
-        angular: 105
+        angular: 108
     } ]
 }, {}, [ 1 ]);
