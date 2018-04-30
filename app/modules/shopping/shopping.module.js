@@ -13,6 +13,7 @@ angular
       })
       .state("app.shopping.list", {
         url: "/list",
-        component: "mooseShoppingList"
+        component: "mooseShoppingList",
+        class: "app-shopping-list"
       });
   });

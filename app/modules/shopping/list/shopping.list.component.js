@@ -6,9 +6,5 @@ angular.module("moose.shopping").component("mooseShoppingList", {
 function ShoppingListController() {
   var ctrl = this;
 
-  ctrl.$onInit = function() {
-    ctrl.user = {
-      fullName: "Hallo Welt"
-    };
-  };
+  ctrl.$onInit = function() {};
 }

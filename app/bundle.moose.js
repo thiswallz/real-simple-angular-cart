@@ -156,11 +156,7 @@
         });
         function ShoppingListController() {
             var ctrl = this;
-            ctrl.$onInit = function() {
-                ctrl.user = {
-                    fullName: "Hallo Welt"
-                };
-            };
+            ctrl.$onInit = function() {};
         }
     }, {} ],
     10: [ function(require, module, exports) {
@@ -170,11 +166,7 @@
         });
         function ShoppingController() {
             var ctrl = this;
-            ctrl.$onInit = function() {
-                ctrl.user = {
-                    fullName: "Hallo Welt"
-                };
-            };
+            ctrl.$onInit = function() {};
         }
     }, {} ],
     11: [ function(require, module, exports) {
@@ -189,7 +181,8 @@
                 restricted: true
             }).state("app.shopping.list", {
                 url: "/list",
-                component: "mooseShoppingList"
+                component: "mooseShoppingList",
+                class: "app-shopping-list"
             });
         } ]);
     }, {} ],
