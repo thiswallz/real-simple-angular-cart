@@ -1,5 +1,7 @@
 require("./dashboard/dashboard.module");
 require("./dashboard/dashboard.component");
+require("./product/product.module");
+require("./product/product.component");
 require("./shopping/shopping.module");
 require("./shopping/shopping.component");
 require("./shopping/list/shopping.list.component");

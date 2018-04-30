@@ -5,7 +5,6 @@ angular
       .state({
         abstract: true,
         name: "app.shopping",
-        title: "Shopping",
         class: "app-shopping",
         url: "/shopping",
         component: "mooseShopping",
@@ -13,6 +12,7 @@ angular
       })
       .state("app.shopping.list", {
         url: "/list",
+        title: "Shopping",
         component: "mooseShoppingList",
         class: "app-shopping-list"
       });

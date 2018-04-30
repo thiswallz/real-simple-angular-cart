@@ -17,6 +17,7 @@ angular
     "moose.configuration",
     "moose.dashboard",
     "moose.shopping",
+    "moose.product",
     "moose.header",
     "moose.sidebar"
   ])
